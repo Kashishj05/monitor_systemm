@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Internal Task Tracking</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Task Tracking System</h1>
+
+    <!-- Registration -->
+    <section id="register-section">
+      <h2>Register</h2>
+      <input type="text" id="reg-username" placeholder="Username" />
+      <input type="password" id="reg-password" placeholder="Password" />
+      <select id="reg-role">
+        <option value="employee">Employee</option>
+        <option value="manager">Manager</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button onclick="register()">Register</button>
+    </section>
+
+    <!-- Login -->
+    <section id="login-section">
+      <h2>Login</h2>
+      <input type="text" id="login-username" placeholder="Username" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </section>
+
+    <!-- Task Management -->
+    <section id="task-section" style="display: none">
+      <h2>Tasks</h2>
+      <div>
+        <input type="text" id="task-title" placeholder="Task Title" />
+        <textarea id="task-desc" placeholder="Task Description"></textarea>
+        <select id="task-status">
+          <option value="open">Open</option>
+          <option value="in_progress">In Progress</option>
+          <option value="blocked">Blocked</option>
+          <option value="completed">Completed</option>
+        </select>
+        <select id="task-priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <input type="text" id="task-assignee" placeholder="Assignee Username" />
+        <button onclick="createTask()">Create Task</button>
+      </div>
+
+      <h3>All Tasks</h3>
+      <ul id="task-list"></ul>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
