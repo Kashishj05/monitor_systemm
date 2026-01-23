@@ -33,6 +33,7 @@
     <!-- Task Management -->
     <section id="task-section" style="display: none">
       <h2>Tasks</h2>
+      <button onclick="logout()">Logout</button>
       <div>
         <input type="text" id="task-title" placeholder="Task Title" />
         <textarea id="task-desc" placeholder="Task Description"></textarea>
@@ -47,12 +48,24 @@
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
-        <input type="text" id="task-assignee" placeholder="Assignee Username" />
+        <label id="assignee-label" style="display: none">Assignee:</label>
+        <select id="task-assignee-select">
+          <option value="">Select Assignee</option>
+        </select>
+        <input
+          type="text"
+          id="task-assignee"
+          placeholder="Assignee Email"
+          style="display: none"
+        />
         <button onclick="createTask()">Create Task</button>
       </div>
 
-      <h3>All Tasks</h3>
+      <h3>My Tasks</h3>
       <ul id="task-list"></ul>
+
+      <h3>All Tasks</h3>
+      <ul id="all-task-list"></ul>
     </section>
 
     <script src="script.js"></script>

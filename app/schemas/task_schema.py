@@ -11,7 +11,7 @@ class TaskBase(BaseModel):
     due_date:Optional[date]= None
 
 class TaskCreate(TaskBase):
-    assigned_to_id: int
+    assigned_to_email: str
 
 
 class TaskUpdate(BaseModel):
@@ -35,7 +35,7 @@ class TaskResponse(TaskBase):
     created_at:datetime
     
     class Config:
-         orm_mode= True
+         from_attributes = True
 
 class TaskListResponse(BaseModel):
     tasks: list[TaskResponse]
