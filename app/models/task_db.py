@@ -11,7 +11,7 @@ class Task(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
 
-    assigned_to_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    assigned_to_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_by_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     status = Column(String, default="pending")

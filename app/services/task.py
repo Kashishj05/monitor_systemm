@@ -6,6 +6,8 @@ from app.models.user import User
 from datetime import datetime
 from app.services.activity_services import log_activity
 from typing import Optional
+from app.services.notification_services import send_task_assignment_email
+from fastapi import BackgroundTasks
 
 # Constants
 DEFAULT_STATUS = "pending"
@@ -14,7 +16,7 @@ ALLOWED_SORT_FIELDS = {"created_at", "title", "priority", "status", "due_date"}
 MAX_PAGE_SIZE = 100
 
 # POST /tasks	Task create
-def create_task(db:Session, data:TaskCreate ,current_user:int)->Task:
+def create_task(db:Session, data:TaskCreate, current_user:int, background_tasks: BackgroundTasks)->Task:
    try:
     if not data.title:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,detail="task title is required")
@@ -29,9 +31,9 @@ def create_task(db:Session, data:TaskCreate ,current_user:int)->Task:
     new_task= Task(
         title= data.title,
         description= data.description,
-        assigned_to_id= data.assigned_to_id,
+        assigned_to_id= assigned_user.id,
         created_by_id =current_user,
-        status=DEFAULT_STATUS,
+        status= data.status or DEFAULT_STATUS,
         priority=data.priority or DEFAULT_PRIORITY,
         due_date= data.due_date,
         created_at = datetime.utcnow()
@@ -48,6 +50,9 @@ def create_task(db:Session, data:TaskCreate ,current_user:int)->Task:
         entity_id=new_task.id,
         description="New task created"
     )
+    print(f"DEBUG: Task created successfully, sending notification email to {assigned_user.email}")
+    send_task_assignment_email(new_task, assigned_user.email, background_tasks)
+    print(f"DEBUG: Notification email function called")
     return new_task
    except Exception as e:
         raise HTTPException(status_code= 500, detail=f"Internal server error: {str(e)}")
@@ -240,8 +245,23 @@ def get_filtered_task(db:Session,
     total = query.count()
     tasks = query.offset(offset).limit(page_size).all()
     
+    # Convert tasks to dicts
+    task_dicts = []
+    for task in tasks:
+        task_dicts.append({
+            "id": task.id,
+            "title": task.title,
+            "description": task.description,
+            "priority": task.priority,
+            "status": task.status,
+            "assigned_to_id": task.assigned_to_id,
+            "created_by_id": task.created_by_id,
+            "created_at": task.created_at,
+            "due_date": task.due_date
+        })
+    
     return {
-        "tasks": tasks,
+        "tasks": task_dicts,
         "total": total,
         "page": page,
         "page_size": page_size,

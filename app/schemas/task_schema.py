@@ -12,6 +12,7 @@ class TaskBase(BaseModel):
 
 class TaskCreate(TaskBase):
     assigned_to_email: str
+    status: str = "pending"
 
 
 class TaskUpdate(BaseModel):
@@ -37,9 +38,3 @@ class TaskResponse(TaskBase):
     class Config:
          from_attributes = True
 
-class TaskListResponse(BaseModel):
-    tasks: list[TaskResponse]
-    total: int
-    page: int
-    page_size: int
-    total_pages: int

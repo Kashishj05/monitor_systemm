@@ -82,6 +82,11 @@ def update_user(db:Session, user_id:int, data:UserUpadte):
 
 def delete_user(db:Session, user_id:int , current_user:User):
     user = get_user_by_id(db , user_id)
+    
+    # Delete all activity logs for this user
+    from app.models.activity_model import ActivityLog
+    db.query(ActivityLog).filter(ActivityLog.actor_id == user_id).delete()
+    
     db.delete(user)
     db.commit()
     log_activity(

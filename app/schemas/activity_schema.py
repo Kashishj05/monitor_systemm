@@ -10,6 +10,7 @@ class ActivityLogResponse(BaseModel):
     entity_id:int
     description :str|None
     created_at:datetime
+    user_name: str
    
     class Config:
         from_attributes=True
